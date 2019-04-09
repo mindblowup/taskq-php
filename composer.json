@@ -1,0 +1,19 @@
+{
+    "name": "mindblowup/taskq-php",
+    "description": "TaskQ client library for PHP",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Mahmoud Elnezamy",
+            "email": "mahmoudelnezamy@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "TaskQ\\": "src/"
+        }
+    }
+}
