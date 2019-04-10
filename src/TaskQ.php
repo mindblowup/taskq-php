@@ -14,6 +14,7 @@ class TaskQ {
     private $taskQ_url;
     private $task_api = [];
     private $http_client;
+    private $errors = [];
     public const TASK_HTTP = 'http';
     public const TASK_COMMAND = 'command';
     public function __construct($port, $secret) {
@@ -54,37 +55,50 @@ class TaskQ {
     }
 
     public function send(){
-//        echo "<pre>";
         foreach ($this->http_tasks as $channel => $tasks) {
-            $this->sendRequest(self::TASK_HTTP, $channel, $tasks);
+            $response = $this->sendRequest(self::TASK_HTTP, $channel, $tasks);
             unset($this->http_tasks[$channel]);
+            yield $channel => $response;
         }
-//        print_r($this->http_tasks);
-        return $this;
     }
 
     private function sendRequest($type ,$channel, array $task) {
-        echo "<pre>";
-        print_r($task);
+        switch ($type){
+            case self::TASK_COMMAND:
+                $api_uri = $this->task_api['add_command_task']; break;
+            case self::TASK_HTTP:
+            default:
+                $api_uri = $this->task_api['add_http_task']; break;
+        }
         try {
-            $response = $this->http_client->post($this->taskQ_url . '/add-http-task', [
-//            $response = $this->http_client->post('http://instadiet.route/api/v1/test-taskq/post-success', [
+            $response = $this->http_client->post($this->taskQ_url . $api_uri, [
                 'query' => [
                     'secret' => $this->secret,
                     'channel' => $channel
                 ],
                 'json' => $task
             ]);
-
-//            print_r((string)$response->getBody());
+            return (string)$response->getBody();
         } catch (ClientException $e) {
-            echo Psr7\str($e->getRequest());
-            echo Psr7\str($e->getResponse());
+            $this->errors[$channel] = [
+                'request' => Psr7\str($e->getRequest()),
+                'response' => Psr7\str($e->getResponse()),
+            ];
+            return false;
         } catch (RequestException $e) {
-            echo Psr7\str($e->getRequest());
-            if ($e->hasResponse()) {
-                echo Psr7\str($e->getResponse());
-            }
+            $this->errors[$channel] = [
+                'request' => Psr7\str($e->getRequest()),
+                'response' => $e->hasResponse() ? Psr7\str($e->getResponse()) : '',
+            ];
+            return false;
         }
+    }
+
+    public function errors(){
+        return $this->errors;
+    }
+
+    public function getError($channel) : array {
+        return $this->errors[$channel] ?? [];
     }
 }
