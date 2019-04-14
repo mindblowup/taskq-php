@@ -94,6 +94,10 @@ class TaskQ {
         }
     }
 
+    public function hasErrors(){
+        return count($this->errors) != 0;
+    }
+
     public function errors(){
         return $this->errors;
     }
