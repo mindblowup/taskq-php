@@ -55,11 +55,14 @@ class TaskQ {
     }
 
     public function send(){
+        $return = [];
         foreach ($this->http_tasks as $channel => $tasks) {
             $response = $this->sendRequest(self::TASK_HTTP, $channel, $tasks);
             unset($this->http_tasks[$channel]);
             yield $channel => $response;
+            $return[$channel] = json_decode($response, true)['data'];
         }
+        return $return;
     }
 
     private function sendRequest($type ,$channel, array $task) {

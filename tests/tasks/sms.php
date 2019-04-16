@@ -1,7 +1,5 @@
 <?php
 use TaskQ\HttpTask;
-use TaskQ\TaskOptions;
-
 return function(HttpTask $tsk){
     $tsk->name('Send sms')
         ->url('http://example.com/api/v1/send-sms')

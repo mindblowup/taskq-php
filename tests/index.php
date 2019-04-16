@@ -16,4 +16,5 @@ $taskq->setHeaders([
 $taskq->use('email_channel')->addHttpTask((new Email())->welcome());
 $taskq->addHttpTask(include 'tasks/email2.php');
 $taskq->use('sms')->addHttpTask(include 'tasks/sms.php');
-$taskq->send();
+$taskq->send()->getReturn();
+
