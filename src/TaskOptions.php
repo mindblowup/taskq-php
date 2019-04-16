@@ -6,8 +6,8 @@ class TaskOptions {
     public $startAt;
     public $timeout;
     public $retry;
-    public $retryDelay;
-    public $failureCallback;
+    public $retry_delay;
+    public $failure_callback;
 
     public function forever() {
         $this->repeat = 0;
@@ -34,11 +34,11 @@ class TaskOptions {
         return $this;
     }
     public function retryDelay(int $retryDelay) {
-        $this->retryDelay = $retryDelay;
+        $this->retry_delay = $retryDelay;
         return $this;
     }
     public function failureCallback($failureCallback) {
-        $this->failureCallback = $failureCallback;
+        $this->failure_callback = $failureCallback;
         return $this;
     }
 }
