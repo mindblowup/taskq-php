@@ -17,24 +17,24 @@ class TaskOptions {
         $this->every = $every;
         return $this;
     }
-    public function everyHour() {
-        $this->every = 3600;
+    public function everyHour(int $num = 1) {
+        $this->every = 3600 * $num;
         return $this;
     }
-    public function everyDay() {
-        $this->every = 86400;
+    public function everyDay(int $num = 1) {
+        $this->every = 86400 * $num;
         return $this;
     }
-    public function everyWeek() {
-        $this->every = 604800;
+    public function everyWeek(int $num = 1) {
+        $this->every = 604800 * $num;
         return $this;
     }
-    public function everyMonth() {
-        $this->every = 2592000;
+    public function everyMonth(int $num = 1) {
+        $this->every = 2592000 * $num;
         return $this;
     }
-    public function everyYear() {
-        $this->every = 31536000;
+    public function everyYear(int $num = 1) {
+        $this->every = 31536000 * $num;
         return $this;
     }
     public function repeat(int $repeat) {
