@@ -59,7 +59,6 @@ class TaskQ {
         foreach ($this->http_tasks as $channel => $tasks) {
             $response = $this->sendRequest(self::TASK_HTTP, $channel, $tasks);
             unset($this->http_tasks[$channel]);
-            yield $channel => $response;
             $return[$channel] = json_decode($response, true)['data'];
         }
         return $return;
