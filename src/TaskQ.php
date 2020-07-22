@@ -83,12 +83,16 @@ class TaskQ {
             return (string)$response->getBody();
         } catch (ClientException $e) {
             $this->errors[$channel] = [
+                'exception'=> 'ClientException',
+                'message' => $e->getMessage(),
                 'request' => Psr7\str($e->getRequest()),
                 'response' => Psr7\str($e->getResponse()),
             ];
             return false;
         } catch (RequestException $e) {
             $this->errors[$channel] = [
+                'exception'=> 'RequestException',
+                'message' => $e->getMessage(),
                 'request' => Psr7\str($e->getRequest()),
                 'response' => $e->hasResponse() ? Psr7\str($e->getResponse()) : '',
             ];
